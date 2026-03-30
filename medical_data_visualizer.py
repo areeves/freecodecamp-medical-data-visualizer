@@ -54,8 +54,8 @@ def draw_cat_plot():
 def draw_heat_map():
     # 11
     apfilter = df['ap_lo'] <= df['ap_hi']
-    hfilter = (df['height'] >= df['height'].quantile(0.025)) & (df['height'] < df['height'].quantile(0.975))
-    wfilter = (df['weight'] >= df['weight'].quantile(0.025)) & (df['weight'] < df['weight'].quantile(0.975))
+    hfilter = (df['height'] >= df['height'].quantile(0.025)) & (df['height'] <= df['height'].quantile(0.975))
+    wfilter = (df['weight'] >= df['weight'].quantile(0.025)) & (df['weight'] <= df['weight'].quantile(0.975))
     df_heat = df[ apfilter & hfilter & wfilter ]
 
     # 12
