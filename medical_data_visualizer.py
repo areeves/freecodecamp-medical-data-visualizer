@@ -53,18 +53,32 @@ def draw_cat_plot():
 # 10
 def draw_heat_map():
     # 11
-    df_heat = None
+    apfilter = df['ap_lo'] <= df['ap_hi']
+    hfilter = (df['height'] >= df['height'].quantile(0.025)) & (df['height'] < df['height'].quantile(0.975))
+    wfilter = (df['weight'] >= df['weight'].quantile(0.025)) & (df['weight'] < df['weight'].quantile(0.975))
+    df_heat = df[ apfilter & hfilter & wfilter ]
 
     # 12
-    corr = None
+    corr = df_heat.corr()
 
     # 13
-    mask = None
-
-
+    mask = np.triu(np.ones_like(corr, dtype=bool))
 
     # 14
-    fig, ax = None
+    fig, ax = plt.subplots(figsize=(12, 10))   # or (10, 8) - both commonly pass
+    
+    sns.heatmap(
+        corr,
+        mask=mask,
+        annot=True,           # show correlation values inside cells
+        fmt='.1f',            # one decimal place
+        linewidths=0.5,       # thin lines between cells
+        square=True,          # make cells square
+        center=0,             # center the colormap at 0
+        vmin=-0.15,           # optional but helps matching expected colors
+        vmax=0.35,            # optional
+        cbar_kws={"shrink": 0.8}
+    )
 
     # 15
 
