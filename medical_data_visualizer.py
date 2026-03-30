@@ -12,27 +12,37 @@ df['bmi'] = df['weight'] / (df['height-m'] ** 2)
 df['overweight'] = (df['bmi'] > 25).astype(int)
 
 # 3
-df['gluc-norm'] = (df['gluc'] - 1).astype(bool).astype(int)
-df['cholesterol-norm'] = (df['cholesterol'] - 1).astype(bool).astype(int)
+df['gluc'] = (df['gluc'] - 1).astype(bool).astype(int)
+df['cholesterol'] = (df['cholesterol'] - 1).astype(bool).astype(int)
 
 
 
 # 4
 def draw_cat_plot():
     # 5
-    df_cat = None
-
+    cols = ['cholesterol', 'gluc', 'smoke', 'alco', 'active', 'overweight']
+    df_cat = df.melt(id_vars=['cardio'], value_vars=cols, var_name='Variable', value_name='Value')
 
     # 6
-    df_cat = None
-    
+    df_cat = df_cat.groupby(['cardio', 'Variable', 'Value'], as_index=False).size()
+    df_cat = df_cat.rename(columns={'size': 'total'})   # 'total' is the count used as y-axis
 
     # 7
-
+    g = sns.catplot(
+        data=df_cat,
+        x='Variable',
+        y='total',
+        hue='Value',
+        col='cardio',
+        kind='bar',
+        height=5,
+        aspect=1.2,
+        errorbar=None          # removes unnecessary error bars for binary data
+    )
 
 
     # 8
-    fig = None
+    fig = g.fig
 
 
     # 9
